@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // create reading schema & model
 const ReadingSchema = new Schema({
-    accountId: {
-        type: String,
-    },
     deviceId: {
         type: String,
     },
@@ -17,6 +14,14 @@ const ReadingSchema = new Schema({
     },
     unitType:{
         type: String,
+    },
+    cost: {
+        type: Number,
+        default: 0
+    },
+    units:{
+        type: Number,
+        default: 0
     }
 });
 const Reading = mongoose.model('reading', ReadingSchema);
