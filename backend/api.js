@@ -7,8 +7,8 @@ router.get('/readings', function (req, res, next) {
     }).catch(next);
 });
 router.get('/readings/:deviceId', function (req, res, next) {
-    var query = { deviceId: req.params.deviceId };
-    var { unit, amount } = req.query;
+    var { unit, amount, unitType } = req.query;
+    var query = { deviceId: req.params.deviceId, unitType };
     if(unit && amount){
         query = {
             ...query,
