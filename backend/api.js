@@ -6,6 +6,33 @@ router.get('/readings', function (req, res, next) {
         res.send(readings);
     }).catch(next);
 });
+router.get('/readings/:deviceId', function (req, res, next) {
+    var query = { deviceId: req.params.deviceId };
+    var { unit, amount } = req.query;
+    if(unit && amount){
+        query = {
+            ...query,
+            $expr:{
+                $gt:
+                   [
+                      "$usedAt",
+                       {
+                          $dateSubtract:
+                             {
+                                startDate: "$$NOW",
+                                unit: unit,
+                                amount: Number(amount)
+                             }
+                       }
+                   ]
+             }   
+        }
+    }
+        
+    Reading.find(query).then(function (readings) {
+        res.send(readings);
+    }).catch(next);
+});
 router.post('/readings', function (req, res, next) {
     Reading.create(req.body).then(function (reading) {
         res.send(reading);
