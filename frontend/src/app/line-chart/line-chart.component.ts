@@ -15,8 +15,10 @@ Chart.register(...registerables);
 })
 export class LineChartComponent implements OnInit {
   deviceId = '16042023';
-  period = '7-day';
+  unit: false | "day" | "millisecond" | "second" | "minute" | "hour" | "week" | "month" | "quarter" | "year" | undefined = 'day';
+  amount = '7';
   power_chart: any = null;
+  cost_chart: any = null;
   constructor(private appService: AppService) {
   }
 
@@ -34,9 +36,9 @@ export class LineChartComponent implements OnInit {
 
   loadData() {
     var query = {
-      unit: this.period.split("-")[1],
+      unit: this.unit,
       unitType: "POW",
-      amount: this.period.split("-")[0]
+      amount: this.amount
     }
     this.appService.getReadings(this.deviceId, query).subscribe(readings => {
       console.log("get reading", readings);
@@ -46,16 +48,26 @@ export class LineChartComponent implements OnInit {
           type: 'line',
           data: {
             datasets: [{
+              label: 'Units',
               data: readings,
+              backgroundColor: '#ffce56',
               parsing: {
                 xAxisKey: 'usedAt',
                 yAxisKey: 'usage'
-              }
+              },
+              borderColor: '#ffce56',
+              pointBackgroundColor: 'blue'
             }]
-          }, options: {
+          }, 
+          options: {
+            color: 'blue',
+            responsive: true,
             scales: {
               x: {
-                type: 'timeseries'
+                type: 'timeseries',
+                time: {
+                  unit: this.unit
+                }
               },
             }
           }
@@ -64,7 +76,39 @@ export class LineChartComponent implements OnInit {
         this.power_chart.data.datasets[0].data = readings;
         this.power_chart.update();
       }
-      
+      if(this.cost_chart == null){
+        this.cost_chart = new Chart("cost-canvas", {
+          type: 'line',
+          data: {
+            datasets: [{
+              label: 'Cost',
+              data: readings,
+              backgroundColor: '#cc65fe',
+              parsing: {
+                xAxisKey: 'usedAt',
+                yAxisKey: 'cost'
+              },
+              borderColor: '#cc65fe',
+              pointBackgroundColor: 'red'
+            }]
+          }, 
+          options: {
+            color: 'red',
+            responsive: true,
+            scales: {
+              x: {
+                type: 'timeseries',
+                time: {
+                  unit: this.unit
+                }
+              },
+            }
+          }
+        });
+      } else {        
+        this.cost_chart.data.datasets[0].data = readings;
+        this.cost_chart.update();
+      }
     });
   }
 }
