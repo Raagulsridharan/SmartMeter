@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { Reading } from './reading';
 
 @Injectable({
@@ -9,7 +9,10 @@ import { Reading } from './reading';
 export class AppService {
     constructor(private http: HttpClient) { }
     rootURL = 'http://localhost:4000/api';
-    getReadings(deviceId: string, query: any): Observable<Reading[]> {
+
+    public readings$: Subject<Reading[]> = new Subject<Reading[]>();
+
+    getReadings(deviceId: string, query: any) {
         return this.http.get<Reading[]>(this.rootURL + '/readings/' + deviceId + '?' + this.serialize(query));
     }
 

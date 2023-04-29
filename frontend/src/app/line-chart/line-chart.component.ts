@@ -16,6 +16,7 @@ Chart.register(...registerables);
 export class LineChartComponent implements OnInit {
   deviceId = '16042023';
   period = '7-day';
+  power_chart: any = null;
   constructor(private appService: AppService) {
   }
 
@@ -38,24 +39,32 @@ export class LineChartComponent implements OnInit {
       amount: this.period.split("-")[0]
     }
     this.appService.getReadings(this.deviceId, query).subscribe(readings => {
-      var myChart = new Chart("power-canvas", {
-        type: 'line',
-        data: {
-          datasets: [{
-            data: readings,
-            parsing: {
-              xAxisKey: 'usedAt',
-              yAxisKey: 'usage'
+      console.log("get reading", readings);
+      console.log("get power_chart", this.power_chart);
+      if(this.power_chart == null){
+        this.power_chart = new Chart("power-canvas", {
+          type: 'line',
+          data: {
+            datasets: [{
+              data: readings,
+              parsing: {
+                xAxisKey: 'usedAt',
+                yAxisKey: 'usage'
+              }
+            }]
+          }, options: {
+            scales: {
+              x: {
+                type: 'timeseries'
+              },
             }
-          }]
-        }, options: {
-          scales: {
-            x: {
-              type: 'timeseries'
-            },
           }
-        }
-      });
-    })
+        });
+      } else {        
+        this.power_chart.data.datasets[0].data = readings;
+        this.power_chart.update();
+      }
+      
+    });
   }
 }
