@@ -6,12 +6,10 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from 'ng2-charts';
-import { UnitsChartComponent } from './units-chart/units-chart.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    UnitsChartComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
