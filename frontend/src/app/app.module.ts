@@ -11,11 +11,13 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material/core';
 import {CdkListboxModule} from '@angular/cdk/listbox';
 import { MaterialModule } from './material.module';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LineChartComponent
+    LineChartComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,

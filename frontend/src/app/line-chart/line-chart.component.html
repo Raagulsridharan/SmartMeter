@@ -5,15 +5,7 @@
     </mat-select>
 </mat-form-field>
 <mat-form-field appearance="fill">
-    <mat-label><mat-icon>history</mat-icon>Unit</mat-label>
-    <mat-select [(value)]="unit" (selectionChange)="onPeriodChange($event)">
-        <mat-option [value]="'day'">day</mat-option>
-        <mat-option [value]="'hour'">hour</mat-option>
-        <mat-option [value]="'month'">month</mat-option>
-    </mat-select>
-</mat-form-field>
-<mat-form-field appearance="fill">
-    <mat-label><mat-icon>time</mat-icon>Period</mat-label>
+    <mat-label><mat-icon>history</mat-icon>Period</mat-label>
     <mat-select [(value)]="amount" (selectionChange)="onPeriodChange($event)">
         <mat-option [value]="'1'">1</mat-option>
         <mat-option [value]="'2'">2</mat-option>
@@ -22,6 +14,14 @@
         <mat-option [value]="'5'">5</mat-option>
         <mat-option [value]="'6'">6</mat-option>
         <mat-option [value]="'7'">7</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">    
+    <mat-label><mat-icon>swap_horiz</mat-icon>Unit</mat-label>
+    <mat-select [(value)]="unit" (selectionChange)="onPeriodChange($event)">
+        <mat-option [value]="'day'">day</mat-option>
+        <mat-option [value]="'hour'">hour</mat-option>
+        <mat-option [value]="'month'">month</mat-option>
     </mat-select>
 </mat-form-field>
 <div id="divChart">
