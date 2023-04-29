@@ -1,4 +1,21 @@
+<mat-form-field appearance="fill">
+    <mat-label><mat-icon>device_hub</mat-icon>Device Id</mat-label>
+    <mat-select [(value)]="deviceId" (selectionChange)="onDeviceIdChange($event)">
+        <mat-option>None</mat-option>
+        <mat-option value="16042023">Meter 1</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label><mat-icon>history</mat-icon>Period</mat-label>
+    <mat-select [(value)]="period" (selectionChange)="onPeriodChange($event)">
+        <mat-option value="7-day">last 7 days</mat-option>
+        <mat-option value="24-hour">last 24 hours</mat-option>
+        <mat-option value="1-month">last month</mat-option>
+    </mat-select>
+</mat-form-field>
 <div id="divChart">
-    <canvas id="canvas">
-</canvas>
+    <canvas id="power-canvas">
+    </canvas>
+    <canvas id="cost-canvas">
+    </canvas>
 </div>

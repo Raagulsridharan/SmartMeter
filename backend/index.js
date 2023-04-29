@@ -2,6 +2,7 @@ const mqtt = require('mqtt');
 const Reading = require('./reading');
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 //connecting to mqtt broker
 const client = mqtt.connect('mqtt://broker.hivemq.com')
@@ -17,6 +18,7 @@ mongoose.Promise = global.Promise;
 const app = express();
 app.use(express.static('public'));
 app.use(express.json());
+app.use(cors());
 // initialize routes
 app.use('/api', require('./api'));
 

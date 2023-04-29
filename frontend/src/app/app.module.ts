@@ -8,6 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgChartsModule } from 'ng2-charts';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { HttpClientModule } from '@angular/common/http';
+import {MatNativeDateModule} from '@angular/material/core';
+import {CdkListboxModule} from '@angular/cdk/listbox';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,8 @@ import { HttpClientModule } from '@angular/common/http';
     }),
     BrowserAnimationsModule,
     NgChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

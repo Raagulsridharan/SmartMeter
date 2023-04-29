@@ -8,8 +8,17 @@ import { Reading } from './reading';
 })
 export class AppService {
     constructor(private http: HttpClient) { }
-    rootURL = '/api';
-    getReadings(): Observable<Reading[]> {
-        return this.http.get<Reading[]>(this.rootURL + '/readings');
+    rootURL = 'http://localhost:4000/api';
+    getReadings(deviceId: string, query: any): Observable<Reading[]> {
+        return this.http.get<Reading[]>(this.rootURL + '/readings/' + deviceId + '?' + this.serialize(query));
+    }
+
+    serialize(obj: any) {
+        var str = [];
+        for (var p in obj)
+            if (obj.hasOwnProperty(p)) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+        return str.join("&");
     }
 }

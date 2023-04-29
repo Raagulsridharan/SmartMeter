@@ -14,34 +14,48 @@ Chart.register(...registerables);
   styleUrls: ['./line-chart.component.css']
 })
 export class LineChartComponent implements OnInit {
+  deviceId = '16042023';
+  period = '7-day';
   constructor(private appService: AppService) {
   }
 
   ngOnInit() {
-    var myChart = new Chart("canvas", {
-      type: 'line',
-      data: {
-        datasets: [{
-          data: [{ usedAt: '2016-12-25 12:00', usage: 20 }, { usedAt: '2016-12-25 12:05', usage: 25 }, { usedAt: '2016-12-25 12:15', usage: 10 }],
-          parsing: {
-            xAxisKey: 'usedAt',
-            yAxisKey: 'usage'
-          }
-        }]
-      }, options: {
-        scales: {
-          x: {
-            type: 'timeseries',
-            time: {
-              unit: 'minute'
-            },
-            adapters: {
-              date: {
-              }
+    this.loadData();
+  }
+
+  onDeviceIdChange($event: any) {
+    this.loadData();
+  }
+
+  onPeriodChange($event: any) {
+    this.loadData();
+  }
+
+  loadData() {
+    var query = {
+      unit: this.period.split("-")[1],
+      unitType: "POW",
+      amount: this.period.split("-")[0]
+    }
+    this.appService.getReadings(this.deviceId, query).subscribe(readings => {
+      var myChart = new Chart("power-canvas", {
+        type: 'line',
+        data: {
+          datasets: [{
+            data: readings,
+            parsing: {
+              xAxisKey: 'usedAt',
+              yAxisKey: 'usage'
             }
-          },
+          }]
+        }, options: {
+          scales: {
+            x: {
+              type: 'timeseries'
+            },
+          }
         }
-      }
-    });
+      });
+    })
   }
 }
