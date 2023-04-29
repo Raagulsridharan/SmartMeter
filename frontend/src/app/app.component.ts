@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { SwPush } from '@angular/service-worker';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'frontend';
+  title = 'SmartMeter';
 }

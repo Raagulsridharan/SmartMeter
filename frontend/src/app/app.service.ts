@@ -24,4 +24,12 @@ export class AppService {
             }
         return str.join("&");
     }
+
+    postSubscription(subscription: any, deviceId: string) {
+        return this.http.post(this.rootURL + '/subscriptions', subscription);
+    }
+
+    getSubscription(deviceId: string, query: any) {
+        return this.http.get<Reading[]>(this.rootURL + '/readings/' + deviceId + '?' + this.serialize(query));
+    }
 }

@@ -6,6 +6,7 @@ import { ChartOptions, Color } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { de } from 'date-fns/locale';
+import { SwPush } from '@angular/service-worker';
 Chart.register(...registerables);
 
 @Component({
@@ -19,11 +20,14 @@ export class LineChartComponent implements OnInit {
   amount = '7';
   power_chart: any = null;
   cost_chart: any = null;
-  constructor(private appService: AppService) {
+  VAPID_PUBLIC_KEY = "BEkWJ8M1r08QeZo_xy2TDBKo5b67xyOCdqFePE9s3k9a9Mrsuv_qsYIuEQ3yNHaK5Thrsfh0AfizQM9fN8payw8";
+
+  constructor(private swPush: SwPush, private appService: AppService) {
   }
 
   ngOnInit() {
     this.loadData();
+    this.checkSubscription();
   }
 
   onDeviceIdChange($event: any) {
@@ -110,5 +114,22 @@ export class LineChartComponent implements OnInit {
         this.cost_chart.update();
       }
     });
+  }
+
+  checkSubscription() {
+    this.appService.getSubscription(this.deviceId, {}).subscribe(subscriptions => {
+      console.log("get Subscription", subscriptions);
+      if(subscriptions.length==0){
+        this.subscribeToNotifications(this.deviceId);
+      }
+    });
+  }
+
+  subscribeToNotifications(deviceId: string) {
+    this.swPush.requestSubscription({
+        serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+    .then(sub => this.appService.postSubscription(sub, deviceId).subscribe())
+    .catch(err => console.error("Could not subscribe to notifications", err));
   }
 }
