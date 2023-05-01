@@ -12,12 +12,16 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {CdkListboxModule} from '@angular/cdk/listbox';
 import { MaterialModule } from './material.module';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LineChartComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
