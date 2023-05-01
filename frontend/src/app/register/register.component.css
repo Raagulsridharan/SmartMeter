@@ -1,14 +1,9 @@
-.register-form {
-    max-width: 500px;
-    margin: auto;
+mat-card {
+    max-width: 400px;
+    margin: 2em auto;
+    text-align: center;
   }
   
   mat-form-field {
-    width: 100%;
-    margin-bottom: 20px;
+    display: block;
   }
-  
-  button {
-    margin-top: 20px;
-  }
-  

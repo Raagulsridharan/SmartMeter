@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -6,16 +7,28 @@ import { Component } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  loginValid = true;
   username: string = "";
   password: string = "";
-  show: boolean = false;
-  submit() {
-    console.log("user name is " + this.username)
-    this.clear();
+  phonenumber: string = "";
+  deviceId: string = "";
+  constructor(private router: Router) { }
+
+  public ngOnInit(): void {
+    if(localStorage.getItem("SmartMeterUserName")){      
+      this.router.navigate(['/dashboard']);
+    }
   }
+
+  onSubmit() {
+    console.log("user name is " + this.username)
+    this.clear(); 
+  }
+
   clear() {
     this.username = "";
     this.password = "";
-    this.show = true;
+    this.phonenumber = "";    
+    this.deviceId = "";
   }
 }

@@ -6,7 +6,7 @@
                 The username and password were not recognized
             </mat-error>
             <mat-form-field>
-                <input matInput placeholder="Email" [(ngModel)]="username" name="username" required>
+                <input matInput type="email" placeholder="Email" [(ngModel)]="username" name="username" required>
                 <mat-error>
                     Please provide a valid email address
                 </mat-error>
@@ -19,7 +19,7 @@
             </mat-form-field>
             <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">Login</button>
             &nbsp;
-            <button mat-button (click)="register()">Register</button>
+            <a routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page" >Register</a>
         </form>
     </mat-card-content>
 </mat-card>
