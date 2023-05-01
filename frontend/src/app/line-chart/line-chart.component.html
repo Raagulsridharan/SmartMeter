@@ -1,9 +1,4 @@
-<mat-form-field appearance="fill">
-    <mat-label><mat-icon>device_hub</mat-icon>Device Id</mat-label>
-    <mat-select [(value)]="deviceId" (selectionChange)="onDeviceIdChange($event)">
-        <mat-option value="16042023">Meter 1</mat-option>
-    </mat-select>
-</mat-form-field>
+<h2>Device Id: {{deviceId}}</h2>
 <mat-form-field appearance="fill">
     <mat-label><mat-icon>history</mat-icon>Period</mat-label>
     <mat-select [(value)]="amount" (selectionChange)="onPeriodChange($event)">

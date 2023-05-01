@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { Reading } from './reading';
+import { UserProfile } from './userprofile';
 
 @Injectable({
     providedIn: 'root'
@@ -31,5 +32,13 @@ export class AppService {
 
     getSubscription(deviceId: string, query: any) {
         return this.http.get<Reading[]>(this.rootURL + '/readings/' + deviceId + '?' + this.serialize(query));
+    }
+
+    postUserProfile(userprofile: any) {
+        return this.http.post<UserProfile>(this.rootURL + '/userprofiles', userprofile);
+    }
+
+    login(username: string, password: string) {
+        return this.http.post<UserProfile>(this.rootURL + '/login', { username, password });
     }
 }
