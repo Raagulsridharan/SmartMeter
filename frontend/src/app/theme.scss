@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+
+// Define the primary and accent colors
+$primary: mat-palette($mat-indigo);
+$accent:  mat-palette($mat-pink, A200, A100, A400);
+
+// Create the theme object
+$theme: mat-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+  )
+));
+
+// Apply the theme
+@include angular-material-theme($theme);

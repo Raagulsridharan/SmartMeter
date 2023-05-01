@@ -1,0 +1,32 @@
+<mat-form-field appearance="fill">
+    <mat-label><mat-icon>device_hub</mat-icon>Device Id</mat-label>
+    <mat-select [(value)]="deviceId" (selectionChange)="onDeviceIdChange($event)">
+        <mat-option value="16042023">Meter 1</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+    <mat-label><mat-icon>history</mat-icon>Period</mat-label>
+    <mat-select [(value)]="amount" (selectionChange)="onPeriodChange($event)">
+        <mat-option [value]="'1'">1</mat-option>
+        <mat-option [value]="'2'">2</mat-option>
+        <mat-option [value]="'3'">3</mat-option>
+        <mat-option [value]="'4'">4</mat-option>
+        <mat-option [value]="'5'">5</mat-option>
+        <mat-option [value]="'6'">6</mat-option>
+        <mat-option [value]="'7'">7</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">    
+    <mat-label><mat-icon>swap_horiz</mat-icon>Unit</mat-label>
+    <mat-select [(value)]="unit" (selectionChange)="onPeriodChange($event)">
+        <mat-option [value]="'day'">day</mat-option>
+        <mat-option [value]="'hour'">hour</mat-option>
+        <mat-option [value]="'month'">month</mat-option>
+    </mat-select>
+</mat-form-field>
+<div id="divChart">
+    <canvas id="power-canvas">
+    </canvas>
+    <canvas id="cost-canvas">
+    </canvas>
+</div>
