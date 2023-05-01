@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Reading } from '../reading';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, interval, takeUntil, timer } from 'rxjs';
 import { AppService } from '../app.service';
 import { ChartOptions, Color } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
@@ -28,6 +28,9 @@ export class LineChartComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.checkSubscription();
+    interval(5000).subscribe((time)=>{
+      this.loadData();
+    });
   }
 
   onDeviceIdChange($event: any) {
