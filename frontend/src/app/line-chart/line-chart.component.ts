@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Reading } from '../reading';
-import { Subject, interval, takeUntil, timer } from 'rxjs';
+import { Subject, Subscription, interval, takeUntil, timer } from 'rxjs';
 import { AppService } from '../app.service';
 import { ChartOptions, Color } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
@@ -15,13 +15,13 @@ Chart.register(...registerables);
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements OnInit, OnDestroy {
   deviceId: string | null = null;
   unit: false | "day" | "millisecond" | "second" | "minute" | "hour" | "week" | "month" | "quarter" | "year" | undefined = 'day';
   amount = '7';
   power_chart: any = null;
   cost_chart: any = null;
-  VAPID_PUBLIC_KEY = "BEkWJ8M1r08QeZo_xy2TDBKo5b67xyOCdqFePE9s3k9a9Mrsuv_qsYIuEQ3yNHaK5Thrsfh0AfizQM9fN8payw8";
+  subscription: Subscription = new Subscription();
 
   constructor(private swPush: SwPush, private appService: AppService, private router: Router) {
   }
@@ -30,13 +30,16 @@ export class LineChartComponent implements OnInit {
     if(localStorage.getItem("deviceId")){    
       this.deviceId = localStorage.getItem("deviceId");
       this.loadData();
-      this.checkSubscription();
-      interval(5000).subscribe((time)=>{
+      this.subscription = interval(5000).subscribe((time)=>{
         this.loadData();
       });
     } else {        
       this.router.navigate(['/login']);
     }    
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onDeviceIdChange($event: any) {
@@ -125,22 +128,5 @@ export class LineChartComponent implements OnInit {
         }
       });
     }
-  }
-
-  checkSubscription() {
-    this.appService.getSubscription(this.deviceId!, {}).subscribe(subscriptions => {
-      console.log("get Subscription", subscriptions);
-      if(subscriptions.length==0){
-        this.subscribeToNotifications(this.deviceId!);
-      }
-    });
-  }
-
-  subscribeToNotifications(deviceId: string) {
-    this.swPush.requestSubscription({
-        serverPublicKey: this.VAPID_PUBLIC_KEY
-    })
-    .then(sub => this.appService.postSubscription(sub, deviceId).subscribe())
-    .catch(err => console.error("Could not subscribe to notifications", err));
   }
 }

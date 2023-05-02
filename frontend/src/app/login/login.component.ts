@@ -23,9 +23,12 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     console.log("user name is " + this.username);
     var userprofile = this.appService.login(this.username, this.password).subscribe(userprofile =>{
-
+          if(userprofile.username == this.username){            
+            localStorage.setItem("deviceId", userprofile.deviceId);
+            this.router.navigate(['/dashboard']);           
+            this.clear(); 
+          }
     })
-    this.clear(); 
   }
 
   clear() {

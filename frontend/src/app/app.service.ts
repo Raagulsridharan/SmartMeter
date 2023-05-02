@@ -41,4 +41,8 @@ export class AppService {
     login(username: string, password: string) {
         return this.http.post<UserProfile>(this.rootURL + '/login', { username, password });
     }
+    
+    postAlert(deviceId: any, unitLimit: any) {
+        return this.http.post(this.rootURL + '/alerts', { deviceId, unitLimit });
+    }
 }

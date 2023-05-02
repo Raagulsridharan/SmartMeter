@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Subscription = require('./subscription');
 const Reading = require('./reading');
+const Alert = require('./alert');
 
 //connecting to mqtt broker
 const mqttclient = mqtt.connect('mqtt://broker.hivemq.com')
@@ -49,6 +50,11 @@ mqttclient.on('message', (topic, message, packet) => {
 				console.log(lastReading.usedAt);
 				console.log(lastReading.units);
 				units = parseFloat(lastReading.units + unit);
+				Alert.findOne({deviceId: deviceId}).then(function(alert){
+					if(alert && units > alert.unitLimit){
+						sendMail();
+					}
+				});
 			} else {				
 				console.log("No Last Reading");
 				units = parseFloat(unit);
@@ -122,4 +128,8 @@ function calculateCost(units) {
 		cost += units * 11;
 	}
 	return cost;
+}
+
+function sendMail(){
+	console.log("sending mail");
 }

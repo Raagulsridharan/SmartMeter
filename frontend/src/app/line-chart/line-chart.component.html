@@ -1,4 +1,6 @@
-<h2>Device Id: {{deviceId}}</h2>
+<h2>Device Id: {{deviceId}} &nbsp;
+    <a routerLink="/alert" routerLinkActive="active" ariaCurrentWhenActive="page">Alert</a>
+</h2>
 <mat-form-field appearance="fill">
     <mat-label><mat-icon>history</mat-icon>Period</mat-label>
     <mat-select [(value)]="amount" (selectionChange)="onPeriodChange($event)">
@@ -11,7 +13,7 @@
         <mat-option [value]="'7'">7</mat-option>
     </mat-select>
 </mat-form-field>
-<mat-form-field appearance="fill">    
+<mat-form-field appearance="fill">
     <mat-label><mat-icon>swap_horiz</mat-icon>Unit</mat-label>
     <mat-select [(value)]="unit" (selectionChange)="onPeriodChange($event)">
         <mat-option [value]="'day'">day</mat-option>
