@@ -3,6 +3,7 @@ const router = express.Router();
 const Reading = require('./reading');
 const Subscription = require('./subscription');
 const UserProfile = require('./userprofile');
+
 router.get('/readings', function (req, res, next) {
     Reading.find({}).then(function (readings) {
         res.send(readings);

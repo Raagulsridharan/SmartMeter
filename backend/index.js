@@ -1,16 +1,16 @@
 const mqtt = require('mqtt');
-const Reading = require('./reading');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const webpush = require('web-push');
 const Subscription = require('./subscription');
+const Reading = require('./reading');
 
 //connecting to mqtt broker
-const client = mqtt.connect('mqtt://broker.hivemq.com')
-client.subscribe('KNOW_16042023_VOL');
-client.subscribe('KNOW_16042023_CUR');
-client.subscribe('KNOW_16042023_POW');
+const mqttclient = mqtt.connect('mqtt://broker.hivemq.com')
+//mqttclient.subscribe('KNOW_16042023_VOL');
+//mqttclient.subscribe('KNOW_16042023_CUR');
+mqttclient.subscribe('KNOW_16042023_POW');
 
 // connect to mongodb
 mongoose.connect('mongodb+srv://saravanakumarrc:sarapower@cluster0.omi9lez.mongodb.net/SmartHomeDB?retryWrites=true&w=majority');
@@ -35,31 +35,30 @@ app.listen(process.env.port || 4000, function () {
 	console.log('Ready to Go!');
 });
 
-client.on('message', (topic, message, packet) => {
-	console.log(`Received message on topic ${topic}: ${message.toString()}  : ${message.byteLength}`);
+mqttclient.on('message', (topic, message, packet) => {
+	console.log(`Received message on topic ${topic}: ${message.toString()}`);
 	var deviceId = topic.split('_')[1];
-	var unitType = topic.split('_')[2];
+	var readingType = topic.split('_')[2];
 	var cost = 0;
 	var reading = {};
-	if (unitType == "POW") {
-		Reading.aggregate([
-			{
-				$match: { deviceId: deviceId, unitType: "POW" }
-			},
-			{
-				$group: { _id: "$deviceId", totalPowerConsumption: { $sum: "$usage" } }
+	if (readingType == "POW" && Number(message) > 3) {
+		
+		Reading.findOne({ deviceId: deviceId, unitType: "POW" },[], { sort: { 'usedAt': -1 }}).then(function(lastReading){
+			console.log(lastReading);
+			var unit = Number(message)/1000;
+			if(lastReading){
+				units = lastReading.units + unit;
+				console.log(units);
+				cost = calculateCost(units);
+			} else {
+				units = unit;
+				cost = 0;
 			}
-		]).then(function (aggregateResult) {
-			console.log(aggregateResult);
-			units = aggregateResult[0].totalPowerConsumption / 1000;
-			console.log(units);
-			cost = calculateCost(units);
-			console.log(cost);
 			reading = BuildReadingObject(message, deviceId, topic, cost, units);
 
 			Reading.create(reading).then(function (reading) {
 				console.log(`Persisted!`);
-			});
+			});			
 		});
 	} else {
 		reading = BuildReadingObject(message, deviceId, topic, cost, 0);
@@ -83,7 +82,7 @@ function BuildReadingObject(message, deviceId, topic, cost, calculatedUnit) {
 
 function calculateCost(units) {
 	var cost = 0;
-	units = units - 50;
+	//units = units - 50;
 	if (units > 0) {
 		if (units > 150) {
 			cost += 150 * 4.5;
