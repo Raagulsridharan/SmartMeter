@@ -50,10 +50,12 @@ mqttclient.on('message', (topic, message, packet) => {
 				console.log(lastReading.usedAt);
 				console.log(lastReading.units);
 				units = parseFloat(lastReading.units + unit);
-				Alert.findOne({deviceId: deviceId}).then(function(alert){
-					if(alert && units > alert.unitLimit){
-						sendMail();
-					}
+				Alert.find({deviceId: deviceId}).then(function(alerts){
+					alerts.forEach(function(alert){
+						if(alert && units > alert.unitLimit){
+							sendMail();
+						}
+					});					
 				});
 			} else {				
 				console.log("No Last Reading");
