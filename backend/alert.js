@@ -9,6 +9,10 @@ const AlertSchema = new Schema({
     unitLimit: {
         type: Number,
         default: 0
+    },
+    isSent: {
+        type: Boolean,
+        default: false
     }
 });
 const Alert = mongoose.model('alert', AlertSchema);

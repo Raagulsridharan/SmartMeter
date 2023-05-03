@@ -50,10 +50,12 @@ mqttclient.on('message', (topic, message, packet) => {
 				console.log(lastReading.usedAt);
 				console.log(lastReading.units);
 				units = parseFloat(lastReading.units + unit);
-				Alert.find({deviceId: deviceId}).then(function(alerts){
+				Alert.find({deviceId: deviceId, isSent: false}).then(function(alerts){
 					alerts.forEach(function(alert){
-						if(alert && units > alert.unitLimit){
+						if(alert && alert.isSent && units > alert.unitLimit ){
 							sendMail();
+							alert.isSent = true;
+							//Alert.update(alert);
 						}
 					});					
 				});
