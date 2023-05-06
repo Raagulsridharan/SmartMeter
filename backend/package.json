@@ -17,6 +17,7 @@
     "mongodb": "^5.3.0",
     "mongoose": "^7.0.4",
     "mqtt": "^4.3.7",
+    "nodemailer": "^6.9.1",
     "web-push": "^3.6.1"
   }
 }

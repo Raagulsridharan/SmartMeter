@@ -10,6 +10,7 @@ var fs = require('fs');
 const { Vonage } = require('@vonage/server-sdk');
 const UserProfile = require('./userprofile');
 const moment = require('moment/moment');
+const nodemailer = require('nodemailer');
 
 const vonage = new Vonage({
   apiKey: "ef3f295c",
@@ -69,6 +70,7 @@ mqttclient.on('message', (topic, message, packet) => {
 							UserProfile.findOne({ deviceId: deviceId}).then(function(userprofile){
 								var text = `Unit usage alert: The total units ${units.toFixed(2)} exceeds unit limit ${alert.unitLimit} from ${moment(monthStartingDay).format('L') }. Please save energy!!`;
 								console.log("text", text);
+								sendMail(userprofile.username, text);
 								sendSMS("91"+userprofile.phonenumber, text);
 								alert.isSent = true;
 								alert.sentDate = new Date();
@@ -158,4 +160,29 @@ async function sendSMS(to, text) {
     await vonage.sms.send({to, from, text})
         .then(resp => { console.log('Message sent successfully'); console.log(resp); })
         .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+}
+
+async function sendMail(to, text) {	
+	let mailTransporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: 'saravanakumar071188@gmail.com',
+			pass: 'knkhyaaltirywdwy'
+		}
+	});
+	 
+	let mailDetails = {
+		from: 'saravanakumar071188@gmail.com',
+		to: to,
+		subject: 'Power Usage Alert: Unit exceeded',
+		text: text
+	};
+	console.log('to', to);
+	mailTransporter.sendMail(mailDetails, function(err, data) {
+		if(err) {
+			console.log('Error Occurs', err, data);
+		} else {
+			console.log('Email sent successfully');
+		}
+	});
 }
