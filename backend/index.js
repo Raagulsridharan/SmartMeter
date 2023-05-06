@@ -5,6 +5,16 @@ const cors = require('cors');
 const Subscription = require('./subscription');
 const Reading = require('./reading');
 const Alert = require('./alert');
+var https = require('follow-redirects').https;
+var fs = require('fs');
+const { Vonage } = require('@vonage/server-sdk');
+const UserProfile = require('./userprofile');
+const moment = require('moment/moment');
+
+const vonage = new Vonage({
+  apiKey: "ef3f295c",
+  apiSecret: "9WAtMUX4o6FGzAZy"
+})
 
 //connecting to mqtt broker
 const mqttclient = mqtt.connect('mqtt://broker.hivemq.com')
@@ -47,15 +57,24 @@ mqttclient.on('message', (topic, message, packet) => {
 		Reading.findOne({ deviceId: deviceId, unitType: "POW", usedAt: { $gt: monthStartingDay } },[], { sort: { 'usedAt': -1 }}).then(function(lastReading){
 			var unit = message/1000;
 			if(lastReading){
-				console.log(lastReading.usedAt);
-				console.log(lastReading.units);
+				console.log("usedAt",lastReading.usedAt);
+				console.log("units",lastReading.units);
 				units = parseFloat(lastReading.units + unit);
 				Alert.find({deviceId: deviceId, isSent: false}).then(function(alerts){
+					console.log("alerts", alerts);
 					alerts.forEach(function(alert){
-						if(alert && alert.isSent && units > alert.unitLimit ){
-							sendMail();
-							alert.isSent = true;
-							//Alert.update(alert);
+						console.log("units", units);
+						console.log("alert.unitLimit", alert.unitLimit);
+						if(alert && !alert.isSent && units > alert.unitLimit ){		
+							UserProfile.findOne({ deviceId: deviceId}).then(function(userprofile){
+								var text = `Unit usage alert: The total units ${units.toFixed(2)} exceeds unit limit ${alert.unitLimit} from ${moment(monthStartingDay).format('L') }. Please save energy!!`;
+								console.log("text", text);
+								sendSMS("91"+userprofile.phonenumber, text);
+								alert.isSent = true;
+								alert.sentDate = new Date();
+								console.log("alert", alert);
+								Alert.bulkSave([alert]);
+							})
 						}
 					});					
 				});
@@ -134,6 +153,9 @@ function calculateCost(units) {
 	return cost;
 }
 
-function sendMail(){
-	console.log("sending mail");
+async function sendSMS(to, text) {	
+	const from = "Vonage APIs";
+    await vonage.sms.send({to, from, text})
+        .then(resp => { console.log('Message sent successfully'); console.log(resp); })
+        .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
 }

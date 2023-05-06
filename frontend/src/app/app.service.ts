@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { Reading } from './reading';
 import { UserProfile } from './userprofile';
+import { Alert } from './alert';
 
 @Injectable({
     providedIn: 'root'
@@ -44,5 +45,9 @@ export class AppService {
     
     postAlert(deviceId: any, unitLimit: any) {
         return this.http.post(this.rootURL + '/alerts', { deviceId, unitLimit });
+    }
+
+    getAlerts(deviceId: string, query: any) {
+        return this.http.get<Alert[]>(this.rootURL + '/alerts/' + deviceId + '?' + this.serialize(query));
     }
 }
