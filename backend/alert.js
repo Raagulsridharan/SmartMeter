@@ -13,6 +13,10 @@ const AlertSchema = new Schema({
     isSent: {
         type: Boolean,
         default: false
+    },
+    sentDate:{
+        type: Date,
+        default: null
     }
 });
 const Alert = mongoose.model('alert', AlertSchema);
