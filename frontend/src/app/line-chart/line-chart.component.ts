@@ -20,6 +20,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
   unit: false | "day" | "millisecond" | "second" | "minute" | "hour" | "week" | "month" | "quarter" | "year" | undefined = 'day';
   amount = '7';
   power_chart: any = null;
+  units_chart: any = null;
   cost_chart: any = null;
   subscription: Subscription = new Subscription();
 
@@ -65,7 +66,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
             type: 'line',
             data: {
               datasets: [{
-                label: 'Units',
+                label: 'Power',
                 data: readings,
                 backgroundColor: '#ffce56',
                 parsing: {
@@ -92,6 +93,39 @@ export class LineChartComponent implements OnInit, OnDestroy {
         } else {        
           this.power_chart.data.datasets[0].data = readings;
           this.power_chart.update();
+        }
+        if(this.units_chart == null){
+          this.units_chart = new Chart("units-canvas", {
+            type: 'line',
+            data: {
+              datasets: [{
+                label: 'Units',
+                data: readings,
+                backgroundColor: 'green',
+                parsing: {
+                  xAxisKey: 'usedAt',
+                  yAxisKey: 'units'
+                },
+                borderColor: 'green',
+                pointBackgroundColor: 'orange'
+              }]
+            }, 
+            options: {
+              color: 'orange',
+              responsive: true,
+              scales: {
+                x: {
+                  type: 'timeseries',
+                  time: {
+                    unit: this.unit
+                  }
+                },
+              }
+            }
+          });
+        } else {        
+          this.units_chart.data.datasets[0].data = readings;
+          this.units_chart.update();
         }
         if(this.cost_chart == null){
           this.cost_chart = new Chart("cost-canvas", {
