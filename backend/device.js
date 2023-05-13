@@ -9,6 +9,9 @@ const DeviceSchema = new Schema({
     deviceName: {
         type: String,
     },
+    userId: {
+        type: String,
+    },
     createdDate:{
         type: Date,
         default: null

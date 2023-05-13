@@ -4,6 +4,7 @@ const Reading = require('./reading');
 const Subscription = require('./subscription');
 const UserProfile = require('./userprofile');
 const Alert = require('./alert');
+const Device = require('./device');
 
 router.get('/readings', function (req, res, next) {
     Reading.find({}).then(function (readings) {
@@ -91,6 +92,17 @@ router.post('/userprofiles', function (req, res, next) {
 router.post('/login', function (req, res, next) {
     UserProfile.findOne(req.body).then(function (userprofile) {
         res.send(userprofile);
+    }).catch(next);
+});
+router.post('/devices', function (req, res, next) {
+    Device.create(req.body).then(function (subscription) {
+        res.send(subscription);
+    }).catch(next);
+});
+router.get('/devices/:userId', function (req, res, next) {
+    var query = { deviceId: req.params.userId };
+    Device.find(query).then(function (subscription) {
+        res.send(subscription);
     }).catch(next);
 });
 module.exports = router;
