@@ -12,11 +12,10 @@ export class RegisterComponent implements OnInit {
   username: string = "";
   password: string = "";
   phonenumber: string = "";
-  deviceId: string = "";
   constructor(private router: Router, private appService: AppService) { }
 
   public ngOnInit(): void {
-    if(localStorage.getItem("deviceId")){      
+    if(localStorage.getItem("userId")){      
       this.router.navigate(['/dashboard']);
     }
   }
@@ -26,13 +25,13 @@ export class RegisterComponent implements OnInit {
     var userprofileInput = {
       username : this.username,
       password: this.password,
-      phonenumber: this.phonenumber,
-      deviceId: this.deviceId
+      phonenumber: this.phonenumber
     }
     this.appService.postUserProfile(userprofileInput).subscribe(userprofile =>{
       if(userprofile.username){
+        localStorage.setItem("userId", userprofile._id);
+        this.appService.loginsubject$.next(userprofile._id);
         localStorage.setItem("username", userprofile.username);
-        localStorage.setItem("deviceId", userprofile.deviceId);
         this.router.navigate(['/dashboard']);
       }
       this.clear(); 
@@ -43,6 +42,5 @@ export class RegisterComponent implements OnInit {
     this.username = "";
     this.password = "";
     this.phonenumber = "";    
-    this.deviceId = "";
   }
 }

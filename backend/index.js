@@ -67,7 +67,7 @@ mqttclient.on('message', (topic, message, packet) => {
 						console.log("units", units);
 						console.log("alert.unitLimit", alert.unitLimit);
 						if(alert && !alert.isSent && units > alert.unitLimit ){		
-							UserProfile.findOne({ deviceId: deviceId}).then(function(userprofile){
+							UserProfile.findOne({ _id: alert.userId }).then(function(userprofile){
 								var text = `Unit usage alert: The total units ${units.toFixed(2)} exceeds unit limit ${alert.unitLimit} from ${moment(monthStartingDay).format('L') }. Please save energy!!`;
 								console.log("text", text);
 								sendMail(userprofile.username, text);

@@ -1,4 +1,4 @@
-<h2>Device Id: {{deviceId}} &nbsp;
+<h2>Device Number: {{deviceId}} &nbsp;
     <a routerLink="/alert" routerLinkActive="active" ariaCurrentWhenActive="page">Alert</a>
 </h2>
 <mat-form-field appearance="fill">
@@ -12,7 +12,7 @@
         <mat-option [value]="'6'">6</mat-option>
         <mat-option [value]="'7'">7</mat-option>
     </mat-select>
-</mat-form-field>
+</mat-form-field>&nbsp;
 <mat-form-field appearance="fill">
     <mat-label><mat-icon>swap_horiz</mat-icon>Unit</mat-label>
     <mat-select [(value)]="unit" (selectionChange)="onPeriodChange($event)">

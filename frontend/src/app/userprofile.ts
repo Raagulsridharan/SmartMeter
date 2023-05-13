@@ -1,6 +1,6 @@
 export interface UserProfile {
+    _id: string;
     username: string;
     password: string;
-    deviceId: string;
     phonenumber: number;
 }

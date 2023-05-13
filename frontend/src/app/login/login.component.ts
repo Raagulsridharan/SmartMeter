@@ -15,18 +15,19 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private appService: AppService) { }
 
   public ngOnInit(): void {
-    if(localStorage.getItem("deviceId")){      
+    if(localStorage.getItem("userId")){      
       this.router.navigate(['/dashboard']);
     }
   }
 
   onSubmit() {
     console.log("user name is " + this.username);
-    var userprofile = this.appService.login(this.username, this.password).subscribe(userprofile =>{
+    this.appService.login(this.username, this.password).subscribe(userprofile =>{
           if(userprofile.username == this.username){            
-            localStorage.setItem("deviceId", userprofile.deviceId);
+            localStorage.setItem("userId", userprofile._id);
             this.router.navigate(['/dashboard']);           
             this.clear(); 
+            this.appService.loginsubject$.next(userprofile._id);
           }
     })
   }

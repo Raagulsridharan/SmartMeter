@@ -1,0 +1,52 @@
+<mat-card>
+    <mat-card-content>
+        <div *ngIf="showAddDevice">
+            <form #deviceForm="ngForm" (ngSubmit)="onSubmit()">
+                <h2>Add Device</h2>
+
+                <mat-form-field>
+                    <input matInput min="1" type="number" placeholder="Device number" [(ngModel)]="deviceId"
+                        name="deviceId" required>
+                    <mat-error>
+                        Please provide a valid device number
+                    </mat-error>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field>
+                    <input matInput min="1" type="text" placeholder="Device name" [(ngModel)]="deviceName"
+                        name="deviceName" required>
+                    <mat-error>
+                        Please provide a valid device name
+                    </mat-error>
+                </mat-form-field>
+                <br>
+                <button mat-raised-button color="primary" [disabled]="!deviceForm.form.valid">Submit</button>
+                &nbsp;<button mat-raised-button color="primary" (click)="onCancel()">Cancel</button>
+            </form>
+        </div>
+        <div *ngIf="!showAddDevice">
+            <button mat-raised-button [color]="'primary'" class="example-add-tab-button" (click)="addDevice()">
+                Add new device
+            </button>
+        </div>
+        <br>
+        <div *ngIf="devices.length">
+            <h2>Devices</h2>
+            <mat-tab-group id="tabgroup" mat-stretch-tabs="false" mat-align-tabs="start" [color]="'accent'"
+                [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+                <mat-tab style="height:765px;" *ngFor="let device of devices; let index = index"
+                    [label]="device.deviceName">
+                    <ng-template mat-tab-label>
+                        <mat-icon class="example-tab-icon">router</mat-icon>
+                        &nbsp;{{device.deviceName}}
+                      </ng-template>
+                    <app-line-chart [deviceId]="device.deviceId"></app-line-chart>
+                    <button [color]="'warn'" style="position: absolute; top: 10px; right: 10px;" mat-button class="example-delete-tab-button" (click)="removeDevice(index)">
+                        Delete Tab
+                    </button>
+                    <br>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -6,6 +6,9 @@ const AlertSchema = new Schema({
     deviceId: {
         type: String,
     },
+    userId: {
+        type: String,
+    },
     unitLimit: {
         type: Number,
         default: 0

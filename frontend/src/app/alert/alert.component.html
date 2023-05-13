@@ -11,7 +11,8 @@
                 </mat-error>
             </mat-form-field>
             <br>
-            <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Submit</button>
+            <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Submit</button>&nbsp;
+            <button mat-raised-button (click)="onBack()" >Back</button>
         </form>
         <br>
         <div *ngIf="dataSource.length">

@@ -3,6 +3,7 @@ import { AppService } from '../app.service';
 import { Router } from '@angular/router';
 import { Alert } from '../alert';
 import * as moment from 'moment';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-alert',
@@ -15,7 +16,9 @@ export class AlertComponent implements OnInit {
   displayedColumns: string[] = ['unitLimit', 'isSent', 'sentDate'];
   dataSource: Alert[] = [];
   moment: any = moment;
-  constructor(private appService: AppService, private router: Router){
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  constructor(private appService: AppService, private router: Router, private _snackBar: MatSnackBar){
 
   }
 
@@ -27,10 +30,21 @@ export class AlertComponent implements OnInit {
 
   onSubmit() {
     var deviceId = localStorage.getItem("deviceId");
-    this.appService.postAlert(deviceId, this.unitLimit).subscribe(alert =>{
-          if(alert){            
+    var userId = localStorage.getItem("userId");
+    this.appService.postAlert(deviceId, userId, this.unitLimit).subscribe(alert =>{
+          if(alert){ 
+            this.openSnackBar("🔔Alert saved successfuly!!")           
             this.router.navigate(['/dashboard']);           
           }
     })
+  }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Ok', {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
+  onBack(){
+    this.router.navigate(['/dashboard']); 
   }
 }

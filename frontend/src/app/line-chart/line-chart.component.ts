@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Reading } from '../reading';
 import { Subject, Subscription, interval, takeUntil, timer } from 'rxjs';
 import { AppService } from '../app.service';
@@ -16,7 +16,7 @@ Chart.register(...registerables);
   styleUrls: ['./line-chart.component.css']
 })
 export class LineChartComponent implements OnInit, OnDestroy {
-  deviceId: string | null = null;
+  @Input('deviceId') deviceId: number = 0;
   unit: false | "day" | "millisecond" | "second" | "minute" | "hour" | "week" | "month" | "quarter" | "year" | undefined = 'day';
   amount = '7';
   power_chart: any = null;
@@ -28,8 +28,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {    
-    if(localStorage.getItem("deviceId")){    
-      this.deviceId = localStorage.getItem("deviceId");
+    if(this.deviceId){    
       this.loadData();
       this.subscription = interval(5000).subscribe((time)=>{
         this.loadData();

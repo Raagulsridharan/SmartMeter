@@ -95,12 +95,12 @@ router.post('/login', function (req, res, next) {
     }).catch(next);
 });
 router.post('/devices', function (req, res, next) {
-    Device.create(req.body).then(function (subscription) {
-        res.send(subscription);
+    Device.create(req.body).then(function (device) {
+        res.send(device);
     }).catch(next);
 });
 router.get('/devices/:userId', function (req, res, next) {
-    var query = { deviceId: req.params.userId };
+    var query = { userId: req.params.userId };
     Device.find(query).then(function (subscription) {
         res.send(subscription);
     }).catch(next);
