@@ -20,13 +20,13 @@
     </mat-select>
 </mat-form-field>
 <div id="divChart">    
-    <a mat-button target="_blank" (click)="onAlert('power')">⚡Power Alerts</a>
+    <button mat-flat-button (click)="onAlert('power')">⚡Power Alerts</button>
     <canvas id="power-canvas">
     </canvas>
-    <a mat-button target="_blank" (click)="onAlert('units')">📏Units Alerts</a>
+    <button mat-flat-button (click)="onAlert('units')">📏Units Alerts</button>
     <canvas id="units-canvas">
     </canvas>
-    <a mat-button target="_blank" (click)="onAlert('cost')">₹ Cost Alerts</a>
+    <button mat-flat-button (click)="onAlert('cost')">₹ Cost Alerts</button>
     <canvas id="cost-canvas">
     </canvas>
 </div>

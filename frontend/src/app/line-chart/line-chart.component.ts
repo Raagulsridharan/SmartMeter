@@ -99,17 +99,17 @@ export class LineChartComponent implements OnInit, OnDestroy {
               datasets: [{
                 label: 'Units',
                 data: readings,
-                backgroundColor: '#ffce56',
+                backgroundColor: '#c0f59a',
                 parsing: {
                   xAxisKey: 'usedAt',
                   yAxisKey: 'units'
                 },
-                borderColor: '#ffce56',
-                pointBackgroundColor: 'blue'
+                borderColor: '#c0f59a',
+                pointBackgroundColor: 'green'
               }]
             }, 
             options: {
-              color: 'blue',
+              color: 'green',
               responsive: true,
               scales: {
                 x: {
@@ -138,12 +138,12 @@ export class LineChartComponent implements OnInit, OnDestroy {
                   yAxisKey: 'cost'
                 },
                 borderColor: '#ffce56',
-                pointBackgroundColor: 'blue',
+                pointBackgroundColor: 'red',
                 pointHitRadius: 1
               }]
             }, 
             options: {
-              color: 'blue',
+              color: 'red',
               responsive: true,
               scales: {
                 x: {
