@@ -1,4 +1,6 @@
-<mat-toolbar>
+<mat-toolbar class="toolbar">
     <span (click)="onHomeClick()">Smartmeter</span>
-    <button *ngIf="deviceId" class="btn btn-active" style="position: absolute; right: 10px;" (click)="onLogout()">Logout</button>
+    <div *ngIf="userId">
+        <button mat-raised-button color="warn" style="position: absolute; right: 10px; top:10px;" (click)="onLogout()">Logout</button>
+    </div>    
 </mat-toolbar>

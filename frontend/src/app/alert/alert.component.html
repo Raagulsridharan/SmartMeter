@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-content>
         <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
-            <h2>Add Alert</h2>
+            <h2>Add {{alertType}} Alert</h2>
 
             <mat-form-field>
                 <input matInput min="1" type="number" placeholder="Unit Limit" [(ngModel)]="unitLimit" name="unitLimit"
@@ -11,7 +11,8 @@
                 </mat-error>
             </mat-form-field>
             <br>
-            <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Submit</button>
+            <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Submit</button>&nbsp;
+            <button mat-raised-button (click)="onBack()" >Back</button>
         </form>
         <br>
         <div *ngIf="dataSource.length">
@@ -20,7 +21,7 @@
 
                 <!-- unitLimit Column -->
                 <ng-container matColumnDef="unitLimit">
-                    <th mat-header-cell *matHeaderCellDef> Unit Limit </th>
+                    <th mat-header-cell *matHeaderCellDef> Limit </th>
                     <td mat-cell *matCellDef="let element"> {{element.unitLimit}} </td>
                 </ng-container>
 

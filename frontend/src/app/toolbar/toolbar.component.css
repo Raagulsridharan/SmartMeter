@@ -1,0 +1,6 @@
+.toolbar {
+    height: 10%;
+    background-color: #2761ac;
+    background-image: linear-gradient(to bottom right, #798799, #1072f1);
+    color: aliceblue;
+}

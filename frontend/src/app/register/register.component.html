@@ -24,13 +24,6 @@
                     Please provide a valid phonenumber
                 </mat-error>
             </mat-form-field>
-            
-            <mat-form-field>
-                <input matInput type="number" placeholder="deviceId" [(ngModel)]="deviceId" name="deviceId" required>
-                <mat-error>
-                    Please provide a valid device id
-                </mat-error>
-            </mat-form-field>
 
             <button mat-raised-button color="primary" [disabled]="!registerForm.form.valid">Submit</button>
         </form>

@@ -6,6 +6,9 @@ const AlertSchema = new Schema({
     deviceId: {
         type: String,
     },
+    userId: {
+        type: String,
+    },
     unitLimit: {
         type: Number,
         default: 0
@@ -17,6 +20,9 @@ const AlertSchema = new Schema({
     sentDate:{
         type: Date,
         default: null
+    },
+    alertType:{
+        type: String,
     }
 });
 const Alert = mongoose.model('alert', AlertSchema);

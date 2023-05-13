@@ -60,15 +60,28 @@ mqttclient.on('message', (topic, message, packet) => {
 			if(lastReading){
 				console.log("usedAt",lastReading.usedAt);
 				console.log("units",lastReading.units);
-				units = parseFloat(lastReading.units + unit);
+				units = parseFloat(lastReading.units + unit);				
+				cost = calculateCost(units);
 				Alert.find({deviceId: deviceId, isSent: false}).then(function(alerts){
 					console.log("alerts", alerts);
 					alerts.forEach(function(alert){
 						console.log("units", units);
 						console.log("alert.unitLimit", alert.unitLimit);
-						if(alert && !alert.isSent && units > alert.unitLimit ){		
-							UserProfile.findOne({ deviceId: deviceId}).then(function(userprofile){
-								var text = `Unit usage alert: The total units ${units.toFixed(2)} exceeds unit limit ${alert.unitLimit} from ${moment(monthStartingDay).format('L') }. Please save energy!!`;
+						console.log("alert.alertType", alert.alertType);
+						if(alert && !alert.isSent 
+							&& ((alert.alertType == "power" && parseFloat(message.toString()) > alert.unitLimit)
+							|| (alert.alertType == "units" && units > alert.unitLimit)
+							|| (alert.alertType == "cost" && cost > alert.unitLimit))){		
+							UserProfile.findOne({ _id: alert.userId }).then(function(userprofile){
+								var consumption = 0;
+								if(alert.alertType == "power"){
+									consumption = parseFloat(message.toString());
+								} else if(alert.alertType == "units"){
+									consumption = units.toFixed(2);
+								} else if(alert.alertType == "cost"){
+									consumption = cost;
+								}
+								var text = `Smartmeter - usage alert: The ${alert.alertType} ${consumption} exceeds limit ${alert.unitLimit} from ${moment(monthStartingDay).format('L') }. Please save energy!!`;
 								console.log("text", text);
 								sendMail(userprofile.username, text);
 								sendSMS("91"+userprofile.phonenumber, text);
@@ -83,9 +96,10 @@ mqttclient.on('message', (topic, message, packet) => {
 			} else {				
 				console.log("No Last Reading");
 				units = parseFloat(unit);
+				cost = calculateCost(units);
 			}			
 			console.log(units);
-			cost = calculateCost(units);
+			
 			reading = BuildReadingObject(message, deviceId, topic, cost, units);
 
 			Reading.create(reading).then(function (reading) {

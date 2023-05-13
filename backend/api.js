@@ -12,7 +12,8 @@ router.get('/readings', function (req, res, next) {
     }).catch(next);
 });
 router.get('/alerts/:deviceId', function (req, res, next) {
-    Alert.find({ deviceId: req.params.deviceId }).then(function (alert) {
+    var { alertType } = req.query;
+    Alert.find({ deviceId: req.params.deviceId, alertType }).then(function (alert) {
         res.send(alert);
     }).catch(next);
 });
@@ -95,14 +96,19 @@ router.post('/login', function (req, res, next) {
     }).catch(next);
 });
 router.post('/devices', function (req, res, next) {
-    Device.create(req.body).then(function (subscription) {
-        res.send(subscription);
+    Device.create(req.body).then(function (device) {
+        res.send(device);
     }).catch(next);
 });
 router.get('/devices/:userId', function (req, res, next) {
-    var query = { deviceId: req.params.userId };
+    var query = { userId: req.params.userId };
     Device.find(query).then(function (subscription) {
         res.send(subscription);
     }).catch(next);
+});
+router.delete('/devices/:id', function (req, res, next) {
+    Device.findOneAndDelete({ _id: req.params.id }).then(function (reading) {
+        res.send(reading);
+    });
 });
 module.exports = router;

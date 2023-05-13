@@ -10,10 +10,6 @@ const UserProfileSchema = new Schema({
     },
     phonenumber:{
         type: Number,
-    },
-    deviceId: {
-        type: Number,
-        default: 0
     }
 });
 const UserProfile = mongoose.model('userprofile', UserProfileSchema);

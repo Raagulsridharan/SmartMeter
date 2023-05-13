@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Reading } from '../reading';
 import { Subject, Subscription, interval, takeUntil, timer } from 'rxjs';
 import { AppService } from '../app.service';
@@ -16,20 +16,18 @@ Chart.register(...registerables);
   styleUrls: ['./line-chart.component.css']
 })
 export class LineChartComponent implements OnInit, OnDestroy {
-  deviceId: string | null = null;
+  @Input('deviceId') deviceId: number = 0;
   unit: false | "day" | "millisecond" | "second" | "minute" | "hour" | "week" | "month" | "quarter" | "year" | undefined = 'day';
   amount = '7';
   power_chart: any = null;
   units_chart: any = null;
   cost_chart: any = null;
   subscription: Subscription = new Subscription();
-
   constructor(private swPush: SwPush, private appService: AppService, private router: Router) {
   }
 
   ngOnInit() {    
-    if(localStorage.getItem("deviceId")){    
-      this.deviceId = localStorage.getItem("deviceId");
+    if(this.deviceId){    
       this.loadData();
       this.subscription = interval(5000).subscribe((time)=>{
         this.loadData();
@@ -52,7 +50,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    if(this.deviceId){
+    if(this.deviceId){      
       var query = {
         unit: this.unit,
         unitType: "POW",
@@ -84,7 +82,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
                 x: {
                   type: 'timeseries',
                   time: {
-                    unit: this.unit
+                    unit: 'day'
                   }
                 },
               }
@@ -101,23 +99,23 @@ export class LineChartComponent implements OnInit, OnDestroy {
               datasets: [{
                 label: 'Units',
                 data: readings,
-                backgroundColor: 'green',
+                backgroundColor: '#c0f59a',
                 parsing: {
                   xAxisKey: 'usedAt',
                   yAxisKey: 'units'
                 },
-                borderColor: 'green',
-                pointBackgroundColor: 'orange'
+                borderColor: '#c0f59a',
+                pointBackgroundColor: 'green'
               }]
             }, 
             options: {
-              color: 'orange',
+              color: 'green',
               responsive: true,
               scales: {
                 x: {
                   type: 'timeseries',
                   time: {
-                    unit: this.unit
+                    unit: 'day'
                   }
                 },
               }
@@ -134,13 +132,14 @@ export class LineChartComponent implements OnInit, OnDestroy {
               datasets: [{
                 label: 'Cost',
                 data: readings,
-                backgroundColor: '#cc65fe',
+                backgroundColor: '#ffce56',
                 parsing: {
                   xAxisKey: 'usedAt',
                   yAxisKey: 'cost'
                 },
-                borderColor: '#cc65fe',
-                pointBackgroundColor: 'red'
+                borderColor: '#ffce56',
+                pointBackgroundColor: 'red',
+                pointHitRadius: 1
               }]
             }, 
             options: {
@@ -150,7 +149,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
                 x: {
                   type: 'timeseries',
                   time: {
-                    unit: this.unit
+                    unit: 'day'
                   }
                 },
               }
@@ -162,5 +161,8 @@ export class LineChartComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+  onAlert(alertType: string){
+    this.router.navigate(["\alert", alertType, this.deviceId]);
   }
 }

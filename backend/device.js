@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // create reading schema & model
 const DeviceSchema = new Schema({
-    deviceId: {
-        type: String,
+    deviceId:{
+        type: Number
     },
     deviceName: {
         type: String,
@@ -17,5 +17,5 @@ const DeviceSchema = new Schema({
         default: null
     }
 });
-const Device = mongoose.model('alert', DeviceSchema);
+const Device = mongoose.model('device', DeviceSchema);
 module.exports = Device;

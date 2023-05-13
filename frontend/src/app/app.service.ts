@@ -4,6 +4,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { Reading } from './reading';
 import { UserProfile } from './userprofile';
 import { Alert } from './alert';
+import { Device } from './device';
 
 @Injectable({
     providedIn: 'root'
@@ -11,10 +12,11 @@ import { Alert } from './alert';
 export class AppService {
     constructor(private http: HttpClient) { }
     rootURL = 'http://localhost:4000/api';
+    public loginsubject$ = new Subject<string>();
 
     public readings$: Subject<Reading[]> = new Subject<Reading[]>();
 
-    getReadings(deviceId: string, query: any) {
+    getReadings(deviceId: number, query: any) {
         return this.http.get<Reading[]>(this.rootURL + '/readings/' + deviceId + '?' + this.serialize(query));
     }
 
@@ -27,11 +29,11 @@ export class AppService {
         return str.join("&");
     }
 
-    postSubscription(subscription: any, deviceId: string) {
+    postSubscription(subscription: any, deviceId: number) {
         return this.http.post(this.rootURL + '/subscriptions', subscription);
     }
 
-    getSubscription(deviceId: string, query: any) {
+    getSubscription(deviceId: number, query: any) {
         return this.http.get<Reading[]>(this.rootURL + '/readings/' + deviceId + '?' + this.serialize(query));
     }
 
@@ -43,11 +45,23 @@ export class AppService {
         return this.http.post<UserProfile>(this.rootURL + '/login', { username, password });
     }
     
-    postAlert(deviceId: any, unitLimit: any) {
-        return this.http.post(this.rootURL + '/alerts', { deviceId, unitLimit });
+    postAlert(deviceId: any, userId: any, unitLimit: any, alertType: any) {
+        return this.http.post(this.rootURL + '/alerts', { deviceId, userId, unitLimit, alertType });
     }
 
-    getAlerts(deviceId: string, query: any) {
+    getAlerts(deviceId: number, query: any) {
         return this.http.get<Alert[]>(this.rootURL + '/alerts/' + deviceId + '?' + this.serialize(query));
+    }    
+    
+    postDevice(userId: any, deviceId: any, deviceName: any, createdDate: any) {
+        return this.http.post<Device>(this.rootURL + '/devices', { userId, deviceId, deviceName, createdDate });
+    }
+
+    getDevices(userId: string, query: any) {
+        return this.http.get<Device[]>(this.rootURL + '/devices/' + userId + '?' + this.serialize(query));
+    }
+
+    deleteDevice(id: string) {
+        return this.http.delete(this.rootURL + '/devices/' + id);
     }
 }
