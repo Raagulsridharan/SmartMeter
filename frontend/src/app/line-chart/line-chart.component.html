@@ -1,6 +1,4 @@
-<h2>Device Number: {{deviceId}} &nbsp;
-    <a routerLink="/alert" routerLinkActive="active" ariaCurrentWhenActive="page">Alert</a>
-</h2>
+<h2>Device Number: {{deviceId}}</h2>
 <mat-form-field appearance="fill">
     <mat-label><mat-icon>history</mat-icon>Period</mat-label>
     <mat-select [(value)]="amount" (selectionChange)="onPeriodChange($event)">
@@ -21,11 +19,14 @@
         <mat-option [value]="'month'">month</mat-option>
     </mat-select>
 </mat-form-field>
-<div id="divChart">
+<div id="divChart">    
+    <a mat-button target="_blank" (click)="onAlert('power')">⚡Power Alerts</a>
     <canvas id="power-canvas">
     </canvas>
+    <a mat-button target="_blank" (click)="onAlert('units')">📏Units Alerts</a>
     <canvas id="units-canvas">
     </canvas>
+    <a mat-button target="_blank" (click)="onAlert('cost')">₹ Cost Alerts</a>
     <canvas id="cost-canvas">
     </canvas>
 </div>

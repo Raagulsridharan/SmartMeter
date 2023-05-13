@@ -20,6 +20,9 @@ const AlertSchema = new Schema({
     sentDate:{
         type: Date,
         default: null
+    },
+    alertType:{
+        type: String,
     }
 });
 const Alert = mongoose.model('alert', AlertSchema);

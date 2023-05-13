@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'alert', component: AlertComponent }
+  { path: 'alert/:alertType/:deviceId', component: AlertComponent }
 ];
 
 @NgModule({

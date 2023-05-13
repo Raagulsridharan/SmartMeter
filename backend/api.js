@@ -12,7 +12,8 @@ router.get('/readings', function (req, res, next) {
     }).catch(next);
 });
 router.get('/alerts/:deviceId', function (req, res, next) {
-    Alert.find({ deviceId: req.params.deviceId }).then(function (alert) {
+    var { alertType } = req.query;
+    Alert.find({ deviceId: req.params.deviceId, alertType }).then(function (alert) {
         res.send(alert);
     }).catch(next);
 });

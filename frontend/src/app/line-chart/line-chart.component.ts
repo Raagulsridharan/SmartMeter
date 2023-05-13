@@ -23,7 +23,6 @@ export class LineChartComponent implements OnInit, OnDestroy {
   units_chart: any = null;
   cost_chart: any = null;
   subscription: Subscription = new Subscription();
-
   constructor(private swPush: SwPush, private appService: AppService, private router: Router) {
   }
 
@@ -51,7 +50,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    if(this.deviceId){
+    if(this.deviceId){      
       var query = {
         unit: this.unit,
         unitType: "POW",
@@ -161,5 +160,8 @@ export class LineChartComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+  onAlert(alertType: string){
+    this.router.navigate(["\alert", alertType, this.deviceId]);
   }
 }

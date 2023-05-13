@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Alert } from '../alert';
 import * as moment from 'moment';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-alert',
@@ -11,27 +12,33 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrls: ['./alert.component.css']
 })
 export class AlertComponent implements OnInit {
-  deviceId = localStorage.getItem("deviceId");
+  deviceId = 0;
   unitLimit: number = 10;
   displayedColumns: string[] = ['unitLimit', 'isSent', 'sentDate'];
   dataSource: Alert[] = [];
   moment: any = moment;
+  alertType: string = '';  
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  constructor(private appService: AppService, private router: Router, private _snackBar: MatSnackBar){
+  subscription: Subscription = new Subscription();
+  constructor(private appService: AppService, private router: Router, private _snackBar: MatSnackBar, private activatedRoute: ActivatedRoute){
 
   }
 
   ngOnInit(): void {
-    this.appService.getAlerts(this.deviceId!, {}).subscribe(alerts => {
-      this.dataSource = alerts;
+    
+    this.subscription = this.activatedRoute.params.subscribe(params => {
+      this.alertType = params['alertType'];
+      this.deviceId = params['deviceId'];
+      this.appService.getAlerts(this.deviceId, { alertType: this.alertType }).subscribe(alerts => {
+        this.dataSource = alerts;
+      });
     });
   }
 
   onSubmit() {
-    var deviceId = localStorage.getItem("deviceId");
     var userId = localStorage.getItem("userId");
-    this.appService.postAlert(deviceId, userId, this.unitLimit).subscribe(alert =>{
+    this.appService.postAlert(this.deviceId, userId, this.unitLimit, this.alertType).subscribe(alert =>{
           if(alert){ 
             this.openSnackBar("🔔Alert saved successfuly!!")           
             this.router.navigate(['/dashboard']);           

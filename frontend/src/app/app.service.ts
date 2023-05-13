@@ -45,11 +45,11 @@ export class AppService {
         return this.http.post<UserProfile>(this.rootURL + '/login', { username, password });
     }
     
-    postAlert(deviceId: any, userId: any, unitLimit: any) {
-        return this.http.post(this.rootURL + '/alerts', { deviceId, userId, unitLimit });
+    postAlert(deviceId: any, userId: any, unitLimit: any, alertType: any) {
+        return this.http.post(this.rootURL + '/alerts', { deviceId, userId, unitLimit, alertType });
     }
 
-    getAlerts(deviceId: string, query: any) {
+    getAlerts(deviceId: number, query: any) {
         return this.http.get<Alert[]>(this.rootURL + '/alerts/' + deviceId + '?' + this.serialize(query));
     }    
     
