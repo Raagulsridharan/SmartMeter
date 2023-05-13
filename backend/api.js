@@ -105,4 +105,9 @@ router.get('/devices/:userId', function (req, res, next) {
         res.send(subscription);
     }).catch(next);
 });
+router.delete('/devices/:id', function (req, res, next) {
+    Device.findOneAndDelete({ _id: req.params.id }).then(function (reading) {
+        res.send(reading);
+    });
+});
 module.exports = router;
