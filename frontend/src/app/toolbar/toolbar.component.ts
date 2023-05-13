@@ -15,4 +15,7 @@ export class ToolbarComponent {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
+  onHomeClick(){
+    this.router.navigate(['/']);
+  }
 }
