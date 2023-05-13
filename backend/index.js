@@ -47,7 +47,7 @@ app.listen(process.env.port || 4000, function () {
 });
 
 mqttclient.on('message', (topic, message, packet) => {
-	console.log(`Received message on topic ${topic}: ${message.toString()}`);
+	//console.log(`Received message on topic ${topic}: ${message.toString()}`);
 	var deviceId = topic.split('_')[1];
 	var readingType = topic.split('_')[2];
 	var cost = 0;
@@ -63,11 +63,11 @@ mqttclient.on('message', (topic, message, packet) => {
 				units = parseFloat(lastReading.units + unit);				
 				cost = calculateCost(units);
 				Alert.find({deviceId: deviceId, isSent: false}).then(function(alerts){
-					console.log("alerts", alerts);
+					//console.log("alerts", alerts);
 					alerts.forEach(function(alert){
-						console.log("units", units);
-						console.log("alert.unitLimit", alert.unitLimit);
-						console.log("alert.alertType", alert.alertType);
+						//console.log("units", units);
+						//console.log("alert.unitLimit", alert.unitLimit);
+						//console.log("alert.alertType", alert.alertType);
 						if(alert && !alert.isSent 
 							&& ((alert.alertType == "power" && parseFloat(message.toString()) > alert.unitLimit)
 							|| (alert.alertType == "units" && units > alert.unitLimit)
@@ -87,7 +87,7 @@ mqttclient.on('message', (topic, message, packet) => {
 								sendSMS("91"+userprofile.phonenumber, text);
 								alert.isSent = true;
 								alert.sentDate = new Date();
-								console.log("alert", alert);
+								//console.log("alert", alert);
 								Alert.bulkSave([alert]);
 							})
 						}
