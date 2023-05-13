@@ -82,7 +82,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
                 x: {
                   type: 'timeseries',
                   time: {
-                    unit: this.unit
+                    unit: 'day'
                   }
                 },
               }
@@ -99,23 +99,23 @@ export class LineChartComponent implements OnInit, OnDestroy {
               datasets: [{
                 label: 'Units',
                 data: readings,
-                backgroundColor: 'green',
+                backgroundColor: '#ffce56',
                 parsing: {
                   xAxisKey: 'usedAt',
                   yAxisKey: 'units'
                 },
-                borderColor: 'green',
-                pointBackgroundColor: 'orange'
+                borderColor: '#ffce56',
+                pointBackgroundColor: 'blue'
               }]
             }, 
             options: {
-              color: 'orange',
+              color: 'blue',
               responsive: true,
               scales: {
                 x: {
                   type: 'timeseries',
                   time: {
-                    unit: this.unit
+                    unit: 'day'
                   }
                 },
               }
@@ -132,23 +132,24 @@ export class LineChartComponent implements OnInit, OnDestroy {
               datasets: [{
                 label: 'Cost',
                 data: readings,
-                backgroundColor: '#cc65fe',
+                backgroundColor: '#ffce56',
                 parsing: {
                   xAxisKey: 'usedAt',
                   yAxisKey: 'cost'
                 },
-                borderColor: '#cc65fe',
-                pointBackgroundColor: 'red'
+                borderColor: '#ffce56',
+                pointBackgroundColor: 'blue',
+                pointHitRadius: 1
               }]
             }, 
             options: {
-              color: 'red',
+              color: 'blue',
               responsive: true,
               scales: {
                 x: {
                   type: 'timeseries',
                   time: {
-                    unit: this.unit
+                    unit: 'day'
                   }
                 },
               }
