@@ -3,10 +3,16 @@ const router = express.Router();
 const Reading = require('./reading');
 const Subscription = require('./subscription');
 const UserProfile = require('./userprofile');
+const Alert = require('./alert');
 
 router.get('/readings', function (req, res, next) {
     Reading.find({}).then(function (readings) {
         res.send(readings);
+    }).catch(next);
+});
+router.get('/alerts/:deviceId', function (req, res, next) {
+    Alert.find({ deviceId: req.params.deviceId }).then(function (alert) {
+        res.send(alert);
     }).catch(next);
 });
 router.get('/readings/:deviceId', function (req, res, next) {
@@ -39,6 +45,11 @@ router.get('/readings/:deviceId', function (req, res, next) {
 router.post('/readings', function (req, res, next) {
     Reading.create(req.body).then(function (reading) {
         res.send(reading);
+    }).catch(next);
+});
+router.post('/alerts', function (req, res, next) {
+    Alert.create(req.body).then(function (alert) {
+        res.send(alert);
     }).catch(next);
 });
 router.put('/readings/:id', function (req, res, next) {
