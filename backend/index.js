@@ -2,7 +2,6 @@ const mqtt = require('mqtt');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const webpush = require('web-push');
 const Subscription = require('./subscription');
 const Reading = require('./reading');
 
@@ -41,42 +40,38 @@ mqttclient.on('message', (topic, message, packet) => {
 	var readingType = topic.split('_')[2];
 	var cost = 0;
 	var reading = {};
-	if (readingType == "POW" && Number(message) > 3) {
-		
-		Reading.findOne({ deviceId: deviceId, unitType: "POW" },[], { sort: { 'usedAt': -1 }}).then(function(lastReading){
-			console.log(lastReading);
-			var unit = Number(message)/1000;
+	if (readingType == "POW") {		
+		var date = new Date();
+		var monthStartingDay = new Date(date.getFullYear(), date.getMonth(), 1);
+		Reading.findOne({ deviceId: deviceId, unitType: "POW", usedAt: { $gt: monthStartingDay } },[], { sort: { 'usedAt': -1 }}).then(function(lastReading){
+			var unit = message/1000;
 			if(lastReading){
-				units = lastReading.units + unit;
-				console.log(units);
-				cost = calculateCost(units);
-			} else {
-				units = unit;
-				cost = 0;
-			}
+				console.log(lastReading.usedAt);
+				console.log(lastReading.units);
+				units = parseFloat(lastReading.units + unit);
+			} else {				
+				console.log("No Last Reading");
+				units = parseFloat(unit);
+			}			
+			console.log(units);
+			cost = calculateCost(units);
 			reading = BuildReadingObject(message, deviceId, topic, cost, units);
 
 			Reading.create(reading).then(function (reading) {
 				console.log(`Persisted!`);
 			});			
 		});
-	} else {
-		reading = BuildReadingObject(message, deviceId, topic, cost, 0);
-
-		Reading.create(reading).then(function (reading) {
-			console.log(`Persisted!`);
-		});
 	}
 });
 
-function BuildReadingObject(message, deviceId, topic, cost, calculatedUnit) {
+function BuildReadingObject(message, deviceId, topic, cost, units) {
 	return {
 		usage: Number(message.toString()),
 		usedAt: new Date(),
 		deviceId: deviceId,
 		unitType: topic.split('_')[2],
 		cost: cost,
-		calculatedUnit: calculatedUnit
+		units: units
 	};
 }
 
@@ -127,47 +122,4 @@ function calculateCost(units) {
 		cost += units * 11;
 	}
 	return cost;
-}
-
-const vapidKeys = {
-	publicKey: "BEkWJ8M1r08QeZo_xy2TDBKo5b67xyOCdqFePE9s3k9a9Mrsuv_qsYIuEQ3yNHaK5Thrsfh0AfizQM9fN8payw8",
-	privateKey: "GQdwZG982IJat65DP5IG3-l1v1nREXJuYm8RC3uaG6g"
-};
-webpush.setVapidDetails(
-	'mailto:example@yourdomain.org',
-	vapidKeys.publicKey,
-	vapidKeys.privateKey
-);
-
-function sendNewsletter(deviceId) {
-
-	var query = { deviceId: req.params.deviceId };
-	Subscription.find(query).then(function (allSubscriptions) {
-		console.log('Total subscriptions', allSubscriptions.length);
-
-		const notificationPayload = {
-			"notification": {
-				"title": "Angular News",
-				"body": "Newsletter Available!",
-				"icon": "assets/main-page-logo-small-hat.png",
-				"vibrate": [100, 50, 100],
-				"data": {
-					"dateOfArrival": Date.now(),
-					"primaryKey": 1
-				},
-				"actions": [{
-					"action": "explore",
-					"title": "Go to the site"
-				}]
-			}
-		};
-
-		Promise.all(allSubscriptions.map(sub => webpush.sendNotification(
-			sub, JSON.stringify(notificationPayload))))
-			.then(() => res.status(200).json({ message: 'Newsletter sent successfully.' }))
-			.catch(err => {
-				console.error("Error sending notification, reason: ", err);
-				res.sendStatus(500);
-			});
-	}).catch(next);
 }
