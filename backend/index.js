@@ -24,7 +24,7 @@ const mqttclient = mqtt.connect('mqtt://broker.hivemq.com')
 mqttclient.subscribe('KNOW_16042023_POW');
 
 // connect to mongodb
-mongoose.connect('mongodb+srv://saravanakumarrc:sarapower@cluster0.omi9lez.mongodb.net/SmartHomeDB?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://raagulsam:raagulsam123@cluster0.wnxhlbe.mongodb.net/SmartHomeDB?retryWrites=true&w=majority');
 mongoose.Promise = global.Promise;
 
 // set up our express app
@@ -47,7 +47,7 @@ app.listen(process.env.port || 4000, function () {
 });
 
 mqttclient.on('message', (topic, message, packet) => {
-	//console.log(`Received message on topic ${topic}: ${message.toString()}`);
+	console.log(`Received message on topic ${topic}: ${message.toString()}`);
 	var deviceId = topic.split('_')[1];
 	var readingType = topic.split('_')[2];
 	var cost = 0;
@@ -65,9 +65,9 @@ mqttclient.on('message', (topic, message, packet) => {
 				Alert.find({deviceId: deviceId, isSent: false}).then(function(alerts){
 					//console.log("alerts", alerts);
 					alerts.forEach(function(alert){
-						//console.log("units", units);
-						//console.log("alert.unitLimit", alert.unitLimit);
-						//console.log("alert.alertType", alert.alertType);
+						console.log("units", units);
+						console.log("alert.unitLimit", alert.unitLimit);
+						console.log("alert.alertType", alert.alertType);
 						if(alert && !alert.isSent 
 							&& ((alert.alertType == "power" && parseFloat(message.toString()) > alert.unitLimit)
 							|| (alert.alertType == "units" && units > alert.unitLimit)
